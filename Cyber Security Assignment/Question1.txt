@@ -1,0 +1,19 @@
+Configuring a domain mail server provides users external to your organization a simple method for addressing mail to your users. That is, without a domain mail server, the mail address must specify a particular host in your organization.
+
+For example sam@orange.widget.com, where widget.com is your organization's domain name, and orange is the host that sam uses. But with a domain mail server, users outside your organization can simply specify the user name and domain name, without having to know which host the user uses, for example, sam@widget.com.
+
+To configure a domain mail server, use following procedure.
+
+Create a mail exchanger (MX) record and an address (A) record for the mail server black.widget.com:
+widget.com           IN    MX     10 black.widget.com
+widget.com           IN     A     192.10.143.9
+black.widget.com     IN     A     192.10.143.9Copy code
+Edit sendmail.cf on the mail server (black.widget.com) to add the domain alias (the w class):
+Cw $w $?D$w.$D$. widget.comCopy code
+Mail clients must know where to send their non-local mail, so edit sendmail.cf on each client to point to the mail server (the S macro):
+DRblack.widget.comCopy code
+Use the NameServOpt option to configure the sendmail daemon so everyone can use the MX records defined in the name server brown.widget.com.
+Add aliases for users in the domain that do not have accounts on the mail server using the aliases file, for example:
+sam:sam@orange.widget.com
+david:david@green.widget.com
+judy:judy@red.widget.com
